@@ -437,6 +437,10 @@ impl GraphicObjects {
         self.graphic_objects.len()
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.graphic_objects.is_empty()
+    }
+
     pub fn new(graphic_objects: Vec<Box<dyn GraphicObject>>) -> GraphicObjects {
         GraphicObjects { graphic_objects }
     }
@@ -543,7 +547,7 @@ impl GraphicObjects {
                 ]),
             ];
             static ref CHAR_MAP: HashMap<char, Vec<usize>> = (0..=255u8)
-                .map(|x| char::from(x))
+                .map(char::from)
                 .map(|c| (
                     c,
                     match c {
@@ -652,8 +656,12 @@ impl GraphicObjects {
         }
         result
     }
+}
 
-    pub fn into_iter(self) -> GraphicObjectsIntoIter {
+impl IntoIterator for GraphicObjects {
+    type Item = Box<dyn GraphicObject>;
+    type IntoIter = GraphicObjectsIntoIter;
+    fn into_iter(self) -> GraphicObjectsIntoIter {
         GraphicObjectsIntoIter {
             graphic_objects: self,
         }

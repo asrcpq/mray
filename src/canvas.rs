@@ -27,10 +27,13 @@ impl Canvas {
             return;
         }
         let mut pos = ((y * self.size.0 + x) * 3) as usize;
-        self.data[pos] = (self.data[pos] as f32 * (1. - alpha) + self.color[0] * 255. * alpha) as u8;
+        self.data[pos] =
+            (self.data[pos] as f32 * (1. - alpha) + self.color[0] * 255. * alpha) as u8;
         pos += 1;
-        self.data[pos] = (self.data[pos] as f32 * (1. - alpha) + self.color[1] * 255. * alpha) as u8;
+        self.data[pos] =
+            (self.data[pos] as f32 * (1. - alpha) + self.color[1] * 255. * alpha) as u8;
         pos += 1;
-        self.data[pos] = (self.data[pos] as f32 * (1. - alpha) + self.color[2] * 255. * alpha) as u8;
+        self.data[pos] =
+            (self.data[pos] as f32 * (1. - alpha) + self.color[2] * 255. * alpha) as u8;
     }
 }
