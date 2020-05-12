@@ -7,7 +7,6 @@ use sdl2::pixels::Color;
 
 use mray::algebra::Point2f;
 use mray::canvas::Canvas;
-use mray::graphic_object::GraphicObjects;
 
 fn find_sdl_gl_driver() -> Option<u32> {
     for (index, item) in sdl2::render::drivers().enumerate() {
@@ -25,10 +24,10 @@ pub struct Console {
 
 impl Console {
     pub fn new(size: (i32, i32)) -> Console {
-        let font_size = (15, 20);
+        let font_size = (30, 40);
         Console {
             font_size,
-            scaler: 20.,
+            scaler: 40.,
             canvas: Canvas::new((size.0 * font_size.0, size.1 * font_size.1)),
         }
     }
@@ -38,7 +37,7 @@ impl Console {
         for y in 0..16_u8 {
             for x in 0..16_u8 {
                 let ch: u8 = y * 16 + x;
-                for graphic_object in GraphicObjects::fsd(char::from(ch))
+                for graphic_object in mray::fsd::fsd(char::from(ch))
                     .zoom(self.scaler as f32)
                     .shift(Point2f::from_floats(
                         (self.font_size.0 * x as i32) as f32,
@@ -56,8 +55,8 @@ impl Console {
 fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
-    let window_size: (u32, u32) = (1200, 480);
-    let mut console = Console::new((80, 24));
+    let window_size: (u32, u32) = (540, 400);
+    let mut console = Console::new((18, 10));
 
     let window = video_subsystem
         .window("fsdterm", window_size.0 as u32, window_size.1 as u32)
