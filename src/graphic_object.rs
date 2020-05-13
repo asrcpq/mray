@@ -158,6 +158,7 @@ pub trait GraphicObject: DynClone + Sync + Send + Any {
     fn shift(&self, dp: Point2f) -> Box<dyn GraphicObject>;
     fn rotate(&self, rotate_mat: Mat2x2f) -> Box<dyn GraphicObject>;
     fn zoom(&self, k: f32) -> Box<dyn GraphicObject>;
+    fn shear(&self, k: f32) -> Box<dyn GraphicObject>;
 
     fn render(&self, canvas: &mut Canvas);
 }
@@ -183,6 +184,13 @@ impl GraphicObject for LineSegs2f {
     fn zoom(&self, k: f32) -> Box<dyn GraphicObject> {
         Box::new(LineSegs2f {
             vertices: self.vertices.iter().map(|x| *x * k).collect(),
+            color: self.color,
+        })
+    }
+
+    fn shear(&self, k: f32) -> Box<dyn GraphicObject> {
+        Box::new(LineSegs2f {
+            vertices: self.vertices.iter().map(|x| Point2f::from_floats(x.x + k * x.y, x.y)).collect(),
             color: self.color,
         })
     }
@@ -213,6 +221,7 @@ impl GraphicObject for LineSegs2f {
 pub struct Polygon2f {
     pub vertices: Vec<Point2f>,
     pub color: [f32; 4],
+    pub border_color: [f32; 4],
 }
 
 impl GraphicObject for Polygon2f {
@@ -224,6 +233,7 @@ impl GraphicObject for Polygon2f {
         Box::new(Polygon2f {
             vertices: self.vertices.iter().map(|x| *x + dp).collect(),
             color: self.color,
+            border_color: self.border_color,
         })
     }
 
@@ -231,6 +241,7 @@ impl GraphicObject for Polygon2f {
         Box::new(Polygon2f {
             vertices: self.vertices.iter().map(|x| rotate_mat * *x).collect(),
             color: self.color,
+            border_color: self.border_color,
         })
     }
 
@@ -238,10 +249,28 @@ impl GraphicObject for Polygon2f {
         Box::new(Polygon2f {
             vertices: self.vertices.iter().map(|x| *x * k).collect(),
             color: self.color,
+            border_color: self.border_color,
+        })
+    }
+
+    fn shear(&self, k: f32) -> Box<dyn GraphicObject> {
+        Box::new(Polygon2f {
+            vertices: self.vertices.iter().map(|x| Point2f::from_floats(x.x + k * x.y, x.y)).collect(),
+            color: self.color,
+            border_color: self.border_color,
         })
     }
 
     fn render(&self, canvas: &mut Canvas) {
+        // draw border
+        if self.border_color[3] != 0. {
+            let mut border_vertices = self.vertices.clone();
+            border_vertices.push(border_vertices[0]);
+            LineSegs2f {
+                vertices: border_vertices,
+                color: self.border_color,
+            }.render(canvas);
+        }
         canvas.set_color([self.color[0], self.color[1], self.color[2]]);
         if self.vertices.len() < 3 {
             return;
@@ -343,7 +372,7 @@ impl GraphicObject for Polygon2f {
                     //     println!("{:?}", sorted_processing_edges);
                     //     panic!("not sorted!");
                     // }
-                    for x in last_x..current_x {
+                    for x in last_x + 1..current_x + 1 {
                         canvas.putpixel(x, current_y, self.color[3]);
                     }
                 }
@@ -357,18 +386,21 @@ impl GraphicObject for Polygon2f {
 }
 
 impl Polygon2f {
-    pub fn new(vertices: Vec<Point2f>, color: [f32; 4]) -> Polygon2f {
-        Polygon2f { vertices, color }
+    pub fn new(vertices: Vec<Point2f>, color: [f32; 4], border_color: [f32; 4]) -> Polygon2f {
+        Polygon2f { vertices, color, border_color }
     }
 
     pub fn from_floats(floats: Vec<f32>) -> Polygon2f {
         let mut vertices: Vec<Point2f> = Vec::new();
         let mut iter = floats.iter();
-        let r = iter.next().unwrap();
-        let g = iter.next().unwrap();
-        let b = iter.next().unwrap();
-        let a = iter.next().unwrap();
-        let color: [f32; 4] = [*r, *g, *b, *a];
+        let mut border_color = [0f32; 4];
+        for i in 0..4 {
+            border_color[i] = *iter.next().unwrap();
+        }
+        let mut color = [0f32; 4];
+        for i in 0..4 {
+            color[i] = *iter.next().unwrap();
+        }
         while match iter.next() {
             Some(v1) => match iter.next() {
                 Some(v2) => {
@@ -379,7 +411,7 @@ impl Polygon2f {
             },
             None => false,
         } {}
-        Polygon2f::new(vertices, color)
+        Polygon2f::new(vertices, color, border_color)
     }
 }
 
@@ -411,6 +443,7 @@ pub fn generate_thick_arc(
         graphic_objects.push(Box::new(Polygon2f {
             vertices: nodes.clone(),
             color: fill_color,
+            border_color: [0., 0., 0., 0.],
         }));
     }
     nodes.push(nodes[0]);
@@ -473,6 +506,16 @@ impl GraphicObjects {
         }
     }
 
+    pub fn shear(&self, k: f32) -> GraphicObjects {
+        GraphicObjects {
+            graphic_objects: self
+                .graphic_objects
+                .iter()
+                .map(|graphic_object| graphic_object.shear(k))
+                .collect(),
+        }
+    }
+
     pub fn push(&mut self, element: Box<dyn GraphicObject>) {
         self.graphic_objects.push(element);
     }
@@ -497,6 +540,14 @@ impl GraphicObjects {
                             .collect(),
                     ))),
                 "p" => graphic_objects
+                    .graphic_objects
+                    .push(Box::new(Polygon2f::from_floats(
+                        vec![0f32; 4].into_iter().chain(splited[1..]
+                            .iter()
+                            .map(|x| x.parse::<f32>().expect("float parse fail")))
+                            .collect(),
+                    ))),
+                "P" => graphic_objects
                     .graphic_objects
                     .push(Box::new(Polygon2f::from_floats(
                         splited[1..]

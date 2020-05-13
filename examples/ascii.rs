@@ -38,6 +38,9 @@ impl Console {
             for x in 0..16_u8 {
                 let ch: u8 = y * 16 + x;
                 for graphic_object in mray::fsd::fsd(char::from(ch))
+                    .shift(Point2f::from_floats(-0.5, -0.5))
+                    .shear(-0.25)
+                    .shift(Point2f::from_floats(0.5, 0.5))
                     .zoom(self.scaler as f32)
                     .shift(Point2f::from_floats(
                         (self.font_size.0 * x as i32) as f32,
