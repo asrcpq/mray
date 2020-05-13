@@ -5,12 +5,12 @@ use lazy_static::lazy_static;
 pub fn fsd(c: char) -> GraphicObjects {
     macro_rules! default_color {
         () => {
-            "1 0.7 0 1 "
+            "0 0 1 0.7 "
         };
     };
     macro_rules! default_border_color {
         () => {
-            "1 0.7 0 1 "
+            "0 1 0 0.7 "
         };
     };
     lazy_static! {
@@ -18,72 +18,72 @@ pub fn fsd(c: char) -> GraphicObjects {
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.2 0.1 0.3 0.2 0.7 0.2 0.8 0.1"
+                "0.2 0.1 0.26 0.2 0.74 0.2 0.8 0.1"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.7 0.2 0.8 0.1 0.8 0.5 0.7 0.45"
+                "0.74 0.2 0.8 0.1 0.8 0.5 0.74 0.47"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.7 0.55 0.7 0.8 0.8 0.9 0.8 0.5"
+                "0.74 0.53 0.74 0.8 0.8 0.9 0.8 0.5"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.8 0.9 0.2 0.9 0.3 0.8 0.7 0.8"
+                "0.8 0.9 0.2 0.9 0.26 0.8 0.74 0.8"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.2 0.9 0.3 0.8 0.3 0.55 0.2 0.5"
+                "0.2 0.9 0.26 0.8 0.26 0.53 0.2 0.5"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.3 0.45 0.3 0.2 0.2 0.1 0.2 0.5"
+                "0.26 0.47 0.26 0.2 0.2 0.1 0.2 0.5"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.2 0.5 0.3 0.45 0.45 0.45 0.5 0.5 0.45 0.55 0.3 0.55"
+                "0.2 0.5 0.26 0.47 0.47 0.47 0.5 0.5 0.47 0.53 0.26 0.53"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.55 0.55 0.5 0.5 0.55 0.45 0.7 0.45 0.8 0.5 0.7 0.55"
+                "0.53 0.53 0.5 0.5 0.53 0.47 0.74 0.47 0.8 0.5 0.74 0.53"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.3 0.2 0.5 0.375 0.5 0.5 0.3 0.325"
+                "0.26 0.2 0.5 0.375 0.5 0.5 0.26 0.325"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.45 0.2 0.55 0.2 0.55 0.45 0.5 0.5 0.45 0.45"
+                "0.47 0.2 0.53 0.2 0.53 0.47 0.5 0.5 0.47 0.47"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.7 0.2 0.5 0.375 0.5 0.5 0.7 0.325"
+                "0.74 0.2 0.5 0.375 0.5 0.5 0.74 0.325"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.3 0.8 0.3 0.675 0.5 0.5 0.5 0.625"
+                "0.26 0.8 0.26 0.675 0.5 0.5 0.5 0.625"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.45 0.55 0.5 0.5 0.55 0.55 0.55 0.8 0.45 0.8"
+                "0.47 0.53 0.5 0.5 0.53 0.53 0.53 0.8 0.47 0.8"
             )]),
             GraphicObjects::from_strs(vec![concat!(
                 "P ",
                 default_border_color!(), default_color!(),
-                "0.7 0.8 0.7 0.675 0.5 0.5 0.5 0.625"
+                "0.74 0.8 0.74 0.675 0.5 0.5 0.5 0.625"
             )]),
         ];
         static ref CHAR_MAP: HashMap<char, Vec<usize>> = (0..=255u8)

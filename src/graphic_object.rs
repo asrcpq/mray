@@ -46,10 +46,10 @@ impl LineSegs2f {
 
     #[inline]
     fn wu(x1: f32, y1: f32, x2: f32, y2: f32, color: [f32; 4], canvas: &mut Canvas) {
-        let mut x1: i32 = x1.round() as i32;
-        let mut y1: i32 = y1.round() as i32;
-        let mut x2: i32 = x2.round() as i32;
-        let mut y2: i32 = y2.round() as i32;
+        let mut x1: i32 = x1 as i32;
+        let mut y1: i32 = y1 as i32;
+        let mut x2: i32 = x2 as i32;
+        let mut y2: i32 = y2 as i32;
         let mut dx = x2 - x1;
         let dy = y2 - y1;
         canvas.set_color([color[0], color[1], color[2]]);
@@ -262,15 +262,6 @@ impl GraphicObject for Polygon2f {
     }
 
     fn render(&self, canvas: &mut Canvas) {
-        // draw border
-        if self.border_color[3] != 0. {
-            let mut border_vertices = self.vertices.clone();
-            border_vertices.push(border_vertices[0]);
-            LineSegs2f {
-                vertices: border_vertices,
-                color: self.border_color,
-            }.render(canvas);
-        }
         canvas.set_color([self.color[0], self.color[1], self.color[2]]);
         if self.vertices.len() < 3 {
             return;
@@ -381,6 +372,15 @@ impl GraphicObject for Polygon2f {
             }
 
             current_y += 1;
+        }
+        // draw border
+        if self.border_color[3] != 0. {
+            let mut border_vertices = self.vertices.clone();
+            border_vertices.push(border_vertices[0]);
+            LineSegs2f {
+                vertices: border_vertices,
+                color: self.border_color,
+            }.render(canvas);
         }
     }
 }
