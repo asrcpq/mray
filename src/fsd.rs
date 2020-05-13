@@ -91,7 +91,7 @@ pub fn fsd(c: char) -> GraphicObjects {
             .map(|c| (
                 c,
                 match c {
-                    '!' => vec![3, 9],
+                    '!' => vec![3, 9, 11, 13],
                     '"' => vec![5, 9],
                     '#' => vec![1, 2, 3, 6, 7, 9, 12],
                     '$' => vec![0, 2, 3, 5, 6, 7, 9, 12],
