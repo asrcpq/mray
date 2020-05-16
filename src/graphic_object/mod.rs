@@ -16,7 +16,7 @@ pub trait GraphicObject: DynClone + Sync + Send + Any {
     fn zoom(&self, k: f32) -> Box<dyn GraphicObject>;
     fn shear(&self, k: f32) -> Box<dyn GraphicObject>;
 
-    fn set_color(&mut self,  new_color: Vec<f32>);
+    fn set_color(&mut self, new_color: Vec<f32>);
 
     fn render(&self, canvas: &mut Canvas);
 }

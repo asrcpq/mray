@@ -53,8 +53,8 @@ impl GraphicObject for Polygon2f {
         for i in 0..4 {
             self.border_color[i] = new_color[i];
         }
-        for i in 5..8 {
-            self.color[i] = new_color[i];
+        for i in 4..8 {
+            self.color[i - 4] = new_color[i];
         }
     }
 
