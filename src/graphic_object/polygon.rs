@@ -48,6 +48,16 @@ impl GraphicObject for Polygon2f {
         })
     }
 
+    fn set_color(&mut self,  new_color: Vec<f32>) {
+        assert_eq!(new_color.len(), 8);
+        for i in 0..4 {
+            self.border_color[i] = new_color[i];
+        }
+        for i in 5..8 {
+            self.color[i] = new_color[i];
+        }
+    }
+
     fn render(&self, canvas: &mut Canvas) {
         canvas.set_color([self.color[0], self.color[1], self.color[2]]);
         if self.vertices.len() < 3 {
