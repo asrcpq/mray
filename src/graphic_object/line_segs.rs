@@ -183,13 +183,6 @@ impl GraphicObject for LineSegs2f {
         })
     }
 
-    fn set_color(&mut self,  new_color: Vec<f32>) {
-        assert_eq!(new_color.len(), 4);
-        for i in 0..4 {
-            self.color[i] = new_color[i];
-        }
-    }
-
     fn render(&self, mut canvas: &mut Canvas) {
         let mut flag = false;
         let mut x1: f32 = 0.; // convince compiler
