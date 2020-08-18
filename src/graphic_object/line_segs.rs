@@ -46,10 +46,10 @@ impl LineSegs2f {
 
     #[inline]
     fn wu(x1: f32, y1: f32, x2: f32, y2: f32, color: [f32; 4], canvas: &mut Canvas) {
-        let mut x1: i32 = x1 as i32;
-        let mut y1: i32 = y1 as i32;
-        let mut x2: i32 = x2 as i32;
-        let mut y2: i32 = y2 as i32;
+        let mut x1: i32 = (x1 * canvas.scaler) as i32;
+        let mut y1: i32 = (y1 * canvas.scaler) as i32;
+        let mut x2: i32 = (x2 * canvas.scaler) as i32;
+        let mut y2: i32 = (y2 * canvas.scaler) as i32;
         let mut dx = x2 - x1;
         let dy = y2 - y1;
         canvas.set_color([color[0], color[1], color[2]]);

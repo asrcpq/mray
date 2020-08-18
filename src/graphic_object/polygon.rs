@@ -64,9 +64,15 @@ impl GraphicObject for Polygon2f {
         }
         let mut edges: Vec<Edge> = Vec::new();
         let last_vertex = self.vertices.last().unwrap();
-        let mut last_vertex = (last_vertex.x as i32, last_vertex.y as i32);
+        let mut last_vertex = (
+            (last_vertex.x * canvas.scaler) as i32,
+            (last_vertex.y * canvas.scaler) as i32,
+        );
         for vertex in self.vertices.iter() {
-            let vertex_i32 = (vertex.x as i32, vertex.y as i32);
+            let vertex_i32 = (
+                (vertex.x * canvas.scaler) as i32,
+                (vertex.y * canvas.scaler) as i32,
+            );
             // dy = 0 is thrown
             if vertex_i32.1 > last_vertex.1 {
                 edges.push(Edge {
@@ -160,7 +166,7 @@ impl GraphicObject for Polygon2f {
 
             current_y += 1;
         }
-        // draw border
+        // draw border - no need to scale
         if self.border_color[3] != 0. {
             let mut border_vertices = self.vertices.clone();
             border_vertices.push(border_vertices[0]);

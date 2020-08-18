@@ -1,13 +1,19 @@
 pub struct Canvas {
     pub data: Vec<u8>,
+    pub scaler: f32,
     size: (i32, i32),
     color: [f32; 3],
 }
 
 impl Canvas {
-    pub fn new(size: (i32, i32)) -> Canvas {
+    pub fn new(size: (i32, i32), scaler: f32) -> Canvas {
+        let size: (i32, i32) = (
+            ((size.0 as f32) * scaler) as i32,
+            ((size.1 as f32) * scaler) as i32,
+        );
         Canvas {
             data: vec![0; (size.0 * size.1 * 3) as usize],
+            scaler,
             size,
             color: [0., 0., 0.],
         }
